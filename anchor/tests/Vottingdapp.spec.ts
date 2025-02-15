@@ -12,13 +12,15 @@ const votingAddress = new PublicKey("coUnmi3oBUtwtd9fjeAvSsJssXh5A5xyPbhpewyzRVF
 describe("Voting", () => {
   let context;
   let provider;
-  let votingProgram: anchor.Program<Voting>;
+  anchor.setProvider(anchor.AnchorProvider.env());
+  let votingProgram = anchor.workspace.Voting as Program<Voting>;
 
   beforeAll(async () => {
-    context = await startAnchor("", [{ name: "Voting", programId: votingAddress }], []);
+    /*context = await startAnchor("", [{ name: "Voting", programId: votingAddress }], []);
     provider = new BankrunProvider(context);
 
     votingProgram = new Program<Voting>(IDL, provider);
+    */
   });
 
   it("Initialize Poll", async () => {
@@ -36,8 +38,8 @@ describe("Voting", () => {
   });
 
   it("inittialize candidate", async () => {
-    await votingProgram.methods.initializeCandidate("Smooth", new anchor.BN(1)).rpc();
-    await votingProgram.methods.initializeCandidate("Crunchy", new anchor.BN(1)).rpc();
+    await votingProgram.methods.initializeCandidate("Lewis Hamilton", new anchor.BN(1)).rpc();
+    await votingProgram.methods.initializeCandidate("George Russell", new anchor.BN(1)).rpc();
 
     const [crunchyAddress] = PublicKey.findProgramAddressSync([new anchor.BN(1).toArrayLike(Buffer, "le", 8), Buffer.from("Crunchy")], votingAddress);
 
